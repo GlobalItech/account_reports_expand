@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates>
+	<t t-extend="accountReports.buttons">
+		<t t-jquery="[t-if*='xml_export']" t-operation="before">
+			<button t-if="report_name == 'account.context.general.ledger'" type="button" class='btn btn-primary btn-sm o_account-widget-expand'>Expand Lines</button>
+		</t>
+	</t>
+
+</templates>

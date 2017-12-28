@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    	<template id="account_reports_backend_general_ledger" inherit_id="web.assets_backend" active="True">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/account_reports_ext/static/src/js/account_reports_backend.js"></script>
+            </xpath>
+        </template>
+        
+
+        <template id="assets_financial_report_inherit" inherit_id="account_reports.assets_financial_report" >
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/account_reports_ext/static/src/less/account_financial_report.less" />
+            </xpath>
+        </template>
+        <template id="report_financial_letter_inherit" inherit_id="account_reports.report_financial_letter" >
+            <xpath expr="//head" position="inside">
+                <t t-call-assets="account_reports_ext.assets_financial_report_inherit" t-js="False"/>
+            </xpath>
+        </template>
+        
+        <template id="report_financial_body_inherit" inherit_id="account_reports.report_financial_body" >
+            <xpath expr="//table/thead" position="replace">
+                <t t-if="report.get_name()=='account.financial.html.report'">
+                    <thead>
+                        
+                        <tr>
+                            <t t-set="column" t-value="0" />
+                            <t t-foreach="context.get_columns_names()" t-as="column_name">
+                                <t t-set="column" t-value="column + 1" />
+                                <th t-att-class="context.get_columns_types()[column - 1] == 'number' and 'text-left' or context.get_columns_types()[column - 1] == 'text' and  'text-left' or 'text-center'" t-raw="column_name" t-att-width="context.get_columns_types()[column - 1] == 'number' and '30%' or ''" style='padding-left: 5px;font-weight: normal;'/>
+                            </t>
+                            <!-- <t t-if="mode == 'print'"> -->
+                            <th t-att-class="context.get_columns_types()[column - 1] == 'number' and 'text-right' or context.get_columns_types()[column - 1] == 'text' and  'text-left' or 'text-center'" t-raw="currency" t-att-width="context.get_columns_types()[column - 1] == 'number' and '2%' or ''" style='font-weight: normal;'></th>
+                            <!-- </t>
+                            <t t-if="mode != 'print'">
+                                <th t-att-class="context.get_columns_types()[column - 1] == 'number' and 'text-right' or context.get_columns_types()[column - 1] == 'text' and  'text-left' or 'text-center'" t-att-width="context.get_columns_types()[column - 1] == 'number' and '2%' or ''"></th>
+                                <th></th>
+                            </t> -->
+                            
+                        </tr>
+                        <tr t-if="mode == 'print'">
+                            <th t-att-class="context.get_columns_types()[column - 1] == 'number' and 'text-left' or context.get_columns_types()[column - 1] == 'text' and  'text-left' or 'text-center'" t-raw="current_time" t-att-width="context.get_columns_types()[column - 1] == 'number' and '30%' or ''" style='padding-left: 5px;padding-bottom: 45px;font-weight: normal;'/>
+                            <th></th>
+    
+                        </tr>
+                    </thead>
+                </t>
+                <t t-if="report.get_name()=='account.general.ledger'">
+                    <thead>
+                       
+                        <tr>
+                            <th class="text-left" t-raw="context.get_full_date_names(context.date_to, context.date_from)" style='padding-left: 5px;font-weight: normal;'></th>
+                            <t t-set="column" t-value="0" />
+                            
+                            <t t-foreach="context.get_columns_names()" t-as="column_name">
+                                <t t-set="column" t-value="column + 1" />
+                                <t t-if="column_name!='Balance'">
+                               		<th t-att-class="context.get_columns_types()[column - 1] == 'number' and 'text-right' or context.get_columns_types()[column - 1] == 'text' and  'text-left' or 'text-center'" t-raw="''" t-att-width="context.get_columns_types()[column - 1] == 'number' and '1%' or ''" style='padding-left: 15px;'/> 
+                                </t>
+                                <t t-if="column_name=='Balance'">
+                               		<th t-att-class="context.get_columns_types()[column - 1] == 'number' and 'text-right' or context.get_columns_types()[column - 1] == 'text' and  'text-left' or 'text-center'" t-raw="currency" t-att-width="context.get_columns_types()[column - 1] == 'number' and '1%' or ''" style='padding-left: 15px;'/> 
+                                </t>
+                            </t>
+                            <!-- <th class="text-left" t-raw="currency" style='padding-right: 5px;float:right;font-weight: normal;border-bottom:none;'></th> -->
+                        </tr>
+                         <tr t-if="mode == 'print'">
+                            <th t-att-class="context.get_columns_types()[column - 1] == 'number' and 'text-left' or context.get_columns_types()[column - 1] == 'text' and  'text-left' or 'text-center'" t-raw="current_time" t-att-width="context.get_columns_types()[column - 1] == 'number' and '30%' or ''" style='padding-left: 5px;padding-bottom: 45px;font-weight: normal;'/>
+                            <th></th>
+    
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <t t-set="column" t-value="0" />
+                            <t t-foreach="context.get_columns_names()" t-as="column_name">
+                                <t t-set="column" t-value="column + 1" />
+                                <th t-att-class="context.get_columns_types()[column - 1] == 'number' and 'text-right' or context.get_columns_types()[column - 1] == 'text' and  'text-left' or 'text-center'" t-raw="column_name" t-att-width="context.get_columns_types()[column - 1] == 'number' and '1%' or ''" style='padding-left: 15px;'/>
+                            </t>
+                        </tr>
+                    </thead>
+                    
+                </t>
+                    
+                
+<!--                    <thead>
+                        <tr t-if="report.get_name() == 'coa' and context.get_special_date_line_names()">
+                            <th style="border-bottom: none;"></th>
+                            <th></th>
+                            <t t-foreach="context.get_special_date_line_names()" t-as="column_name">
+                                <th class="text-center" t-raw="column_name" colspan='2'/>
+                            </t>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <t t-set="column" t-value="0" />
+                            <t t-foreach="context.get_columns_names()" t-as="column_name">
+                                <t t-set="column" t-value="column + 1" />
+                                <th t-att-class="context.get_columns_types()[column - 1] == 'number' and 'text-right' or context.get_columns_types()[column - 1] == 'text' and  'text-left' or 'text-center'" t-raw="column_name" t-att-width="context.get_columns_types()[column - 1] == 'number' and '1%' or ''" style='padding-left: 15px;' t-att-summary="context._get_summary(column)"/>
+                            </t>
+                        </tr>
+                    </thead> -->
+                <t t-if="not report.get_name()=='account.general.ledger' and not  report.get_name()=='account.financial.html.report' ">
+                   <thead>
+                    <tr>
+                        <th></th>
+                        <t t-set="column" t-value="0" />
+                        <t t-foreach="context.get_columns_names()" t-as="column_name">
+                            <t t-set="column" t-value="column + 1" />
+                            <th t-att-class="context.get_columns_types()[column - 1] == 'number' and 'text-right' or context.get_columns_types()[column - 1] == 'text' and  'text-left' or 'text-center'" t-raw="column_name" t-att-width="context.get_columns_types()[column - 1] == 'number' and '1%' or ''" style='padding-left: 15px;'/>
+                        </t>
+                    </tr>
+                </thead>
+                </t>
+            </xpath>
+        </template>
+        
+        <template id="internal_layout_shahjad">
+            <!-- Multicompany -->
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id"></t>
+            </t>
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"></t>
+            </t>
+        
+            <div class="header">
+                <div class="row">
+                    <!-- <div class="col-xs-2">
+                        <span t-esc="currency"/>
+                    </div> -->
+                    <!-- <div class="col-xs-2 col-xs-offset-2 text-center">
+                        <span t-esc="company.name"/>
+                    </div>
+                    <div class="col-xs-2 col-xs-offset-3 text-right">
+                        <ul class="list-inline">
+                            <li><span class="page"/></li>
+                            <li>/</li>
+                            <li><span class="topage"/></li>
+                        </ul>
+                    </div> -->
+                </div>
+            </div>
+            <t t-raw="0" />
+        </template>
+    </data>
+</openerp>
+    
